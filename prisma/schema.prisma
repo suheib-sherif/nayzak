@@ -1,0 +1,109 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider  = "postgresql"
+  url       = env("DATABASE_URL")
+  directUrl = env("DIRECT_URL")
+}
+
+enum Role {
+  ADMIN
+  USER
+}
+
+enum ListingStatus {
+  DRAFT
+  PUBLISHED
+  SOLD
+}
+
+enum FuelType {
+  PETROL
+  DIESEL
+  HYBRID
+  ELECTRIC
+  LPG
+}
+
+enum Transmission {
+  AUTOMATIC
+  MANUAL
+}
+
+enum BodyType {
+  SEDAN
+  SUV
+  HATCHBACK
+  COUPE
+  PICKUP
+  VAN
+  WAGON
+}
+
+enum Condition {
+  NEW
+  USED
+  CERTIFIED
+}
+
+model User {
+  id           String       @id @default(cuid())
+  email        String       @unique
+  passwordHash String
+  name         String?
+  role         Role         @default(ADMIN)
+  createdAt    DateTime     @default(now())
+  updatedAt    DateTime     @updatedAt
+  carListings  CarListing[]
+}
+
+model CarListing {
+  id              String        @id @default(cuid())
+  title           String
+  make            String
+  model           String
+  year            Int
+  price           Int
+  priceNegotiable Boolean       @default(false)
+  mileage         Int?
+  fuelType        FuelType      @default(PETROL)
+  transmission    Transmission  @default(AUTOMATIC)
+  bodyType        BodyType      @default(SEDAN)
+  condition       Condition     @default(USED)
+  color           String?
+  city            String
+  description     String?       @db.Text
+  contactPhone    String?
+  contactWhatsApp String?
+  featured        Boolean       @default(false)
+  status          ListingStatus @default(DRAFT)
+  views           Int           @default(0)
+  createdAt       DateTime      @default(now())
+  updatedAt       DateTime      @updatedAt
+  publishedAt     DateTime?
+  userId          String
+  user            User          @relation(fields: [userId], references: [id], onDelete: Cascade)
+  images          CarImage[]
+
+  @@index([status])
+  @@index([city])
+  @@index([make])
+  @@index([year])
+  @@index([price])
+  @@index([featured])
+}
+
+model CarImage {
+  id           String     @id @default(cuid())
+  url          String
+  alt          String?
+  order        Int        @default(0)
+  isPrimary    Boolean    @default(false)
+  carListingId String
+  carListing   CarListing @relation(fields: [carListingId], references: [id], onDelete: Cascade)
+  createdAt    DateTime   @default(now())
+
+  @@index([carListingId])
+}
