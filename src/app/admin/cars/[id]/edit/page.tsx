@@ -39,7 +39,17 @@ export default async function EditCarPage({ params }: EditCarPageProps) {
       />
 
       <div className="p-6">
-        <CarForm initialData={car} carId={car.id} />
+        <CarForm
+          initialData={{
+            ...car,
+            fuelType: car.fuelType as "PETROL" | "DIESEL" | "HYBRID" | "ELECTRIC" | "LPG",
+            transmission: car.transmission as "AUTOMATIC" | "MANUAL",
+            bodyType: car.bodyType as "SEDAN" | "SUV" | "HATCHBACK" | "COUPE" | "PICKUP" | "VAN" | "WAGON",
+            condition: car.condition as "NEW" | "USED" | "CERTIFIED",
+            status: car.status as "DRAFT" | "PUBLISHED" | "SOLD",
+          }}
+          carId={car.id}
+        />
       </div>
     </>
   );

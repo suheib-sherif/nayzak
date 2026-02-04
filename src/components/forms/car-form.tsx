@@ -27,27 +27,7 @@ interface CarImage {
 }
 
 interface CarFormProps {
-  initialData?: {
-    title: string;
-    make: string;
-    model: string;
-    year: number;
-    price: number;
-    priceNegotiable: boolean;
-    mileage: number | null;
-    fuelType: string;
-    transmission: string;
-    bodyType: string;
-    condition: string;
-    color: string | null;
-    city: string;
-    description: string | null;
-    contactPhone: string | null;
-    contactWhatsApp: string | null;
-    featured: boolean;
-    status: string;
-    images?: CarImage[];
-  };
+  initialData?: CarListingFormData & { images?: CarImage[] };
   carId?: string;
 }
 

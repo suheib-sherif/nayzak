@@ -100,7 +100,7 @@ export async function PUT(
     }
 
     // Update car with transaction
-    const car = await prisma.$transaction(async (tx: typeof prisma) => {
+    const car = await prisma.$transaction(async (tx) => {
       // Delete existing images
       await tx.carImage.deleteMany({
         where: { carListingId: id },
